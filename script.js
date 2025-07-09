@@ -1,81 +1,117 @@
 // 确保页面内容在加载后显示
 document.addEventListener('DOMContentLoaded', function() {
-    // 设置超时，确保所有内容加载后显示
-    setTimeout(function() {
-        // 移除加载动画
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 500);
-        }
+    console.log("DOM已加载完成，准备初始化...");
+    
+    // 检查必要的库是否已加载
+    const checkLibraries = () => {
+        const threeJsLoaded = typeof THREE !== 'undefined';
+        const particlesJsLoaded = typeof particlesJS !== 'undefined';
+        const aosLoaded = typeof AOS !== 'undefined';
         
-        // 强制显示主要内容
-        document.body.style.visibility = 'visible';
-        document.body.style.opacity = '1';
-        
-        const header = document.getElementById('home');
-        const sections = document.querySelectorAll('section');
-        
-        if (header) {
-            header.style.visibility = 'visible';
-            header.style.opacity = '1';
-            header.style.zIndex = '10';
-            header.style.position = 'relative';
-        }
-        
-        sections.forEach(section => {
-            section.style.visibility = 'visible';
-            section.style.opacity = '1';
-            section.style.zIndex = '10';
-            section.style.position = 'relative';
+        console.log("库加载状态检查:", {
+            "Three.js": threeJsLoaded ? "已加载" : "未加载",
+            "Particles.js": particlesJsLoaded ? "已加载" : "未加载",
+            "AOS": aosLoaded ? "已加载" : "未加载"
         });
         
-        // 调整Three.js场景的z-index
-        const bgCanvas = document.getElementById('bg-canvas');
-        if (bgCanvas) {
-            bgCanvas.style.zIndex = '-12';
+        if (!threeJsLoaded || !particlesJsLoaded || !aosLoaded) {
+            console.log("等待库加载完成...");
+            setTimeout(checkLibraries, 500);
+            return;
         }
         
-        // 初始化AOS动画
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: false,
-            mirror: false
-        });
+        initializePage();
+    };
+    
+    // 初始化页面
+    const initializePage = () => {
+        console.log("开始初始化页面...");
         
-        // 移除自定义光标（如果存在）
-        const cursor = document.querySelector('.cursor');
-        if (cursor) {
-            cursor.style.display = 'none';
-        }
-        
-        // 初始化技能进度条
-        initSkillBars();
-        
-        // 初始化Three.js场景
-        initThreeScene();
-        
-        // 初始化Particles.js
-        initParticles();
-        
-        // 设置回到顶部按钮
-        setupBackToTop();
-        
-        // 设置联系表单
-        setupContactForm();
-        
-        // 设置导航链接滚动
-        setupSmoothScroll();
-        
-        // 初始化作品集筛选功能
-        initPortfolioFilters();
-        
-        // 设置导航栏滚动效果
-        setupNavbarScroll();
-    }, 1000);
+        // 设置超时，确保所有内容加载后显示
+        setTimeout(function() {
+            // 移除加载动画
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+            
+            // 强制显示主要内容
+            document.body.style.visibility = 'visible';
+            document.body.style.opacity = '1';
+            
+            const header = document.getElementById('home');
+            const sections = document.querySelectorAll('section');
+            
+            if (header) {
+                header.style.visibility = 'visible';
+                header.style.opacity = '1';
+                header.style.zIndex = '10';
+                header.style.position = 'relative';
+            }
+            
+            sections.forEach(section => {
+                section.style.visibility = 'visible';
+                section.style.opacity = '1';
+                section.style.zIndex = '10';
+                section.style.position = 'relative';
+            });
+            
+            // 调整Three.js场景的z-index
+            const bgCanvas = document.getElementById('bg-canvas');
+            if (bgCanvas) {
+                bgCanvas.style.zIndex = '-12';
+            }
+            
+            // 初始化AOS动画
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-in-out',
+                    once: false,
+                    mirror: false
+                });
+            }
+            
+            // 移除自定义光标（如果存在）
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.display = 'none';
+            }
+            
+            // 初始化各功能模块
+            console.log("初始化技能进度条...");
+            initSkillBars();
+            
+            console.log("初始化Three.js场景...");
+            initThreeScene();
+            
+            console.log("初始化Particles.js...");
+            initParticles();
+            
+            console.log("设置回到顶部按钮...");
+            setupBackToTop();
+            
+            console.log("设置联系表单...");
+            setupContactForm();
+            
+            console.log("设置导航链接滚动...");
+            setupSmoothScroll();
+            
+            console.log("初始化作品集筛选功能...");
+            initPortfolioFilters();
+            
+            console.log("设置导航栏滚动效果...");
+            setupNavbarScroll();
+            
+            console.log("页面初始化完成!");
+        }, 1000);
+    };
+    
+    // 开始检查库是否加载
+    checkLibraries();
 });
 
 // 初始化技能进度条
@@ -106,94 +142,120 @@ function initSkillBars() {
 // 初始化Particles.js
 function initParticles() {
     // 检查particles.js是否已加载
-    if (window.particlesJS) {
-        particlesJS('particles-container', {
-            "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#64ffda"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    }
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#64ffda",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
+    if (typeof particlesJS !== 'undefined') {
+        console.log("正在初始化Particles.js...");
+        
+        // 检查容器元素是否存在
+        const container = document.getElementById('particles-container');
+        if (!container) {
+            console.error("Particles.js容器元素未找到!");
+            return;
+        }
+        
+        try {
+            particlesJS('particles-container', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
                     },
-                    "onclick": {
-                        "enable": false,
-                        "mode": "push"
+                    "color": {
+                        "value": "#64ffda"
                     },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
-                        "line_linked": {
-                            "opacity": 0.5
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#64ffda",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
                         }
                     }
-                }
-            },
-            "retina_detect": true
-        });
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": false,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            console.log("Particles.js初始化成功!");
+        } catch (error) {
+            console.error("Particles.js初始化失败:", error);
+        }
     } else {
-        console.error("Particles.js not loaded");
+        console.error("Particles.js未加载! 请检查脚本引用.");
+        
+        // 尝试动态加载particles.js
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js";
+        script.onload = function() {
+            console.log("Particles.js已动态加载，正在初始化...");
+            setTimeout(initParticles, 500); // 重新尝试初始化
+        };
+        script.onerror = function() {
+            console.error("无法动态加载Particles.js!");
+        };
+        document.head.appendChild(script);
     }
 }
 
@@ -230,9 +292,12 @@ function initThreeScene() {
         return;
     }
     
-    // 获取容器元素并设置正确的z-index
+    // 获取容器元素
     const container = document.getElementById('bg-canvas');
-    if (!container) return;
+    if (!container) {
+        console.error("Three.js container not found");
+        return;
+    }
     
     // 确保Three.js场景不覆盖内容
     container.style.zIndex = '-12';
@@ -246,51 +311,74 @@ function initThreeScene() {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 20;
     
-    // 创建渲染器
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // 创建渲染器并明确设置为WebGL
+    const renderer = new THREE.WebGLRenderer({ 
+        antialias: true, 
+        alpha: true,
+        canvas: document.createElement('canvas')
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0x0a192f, 0.3); // 设置背景色为深蓝色，透明度0.3
+    
+    // 将渲染器的canvas添加到容器中
+    container.innerHTML = ''; // 清空容器
     container.appendChild(renderer.domElement);
     
-    // 添加网格
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000;
-    const posArray = new Float32Array(particlesCount * 3);
-    
-    for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 50;
-    }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    
-    // 材质
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.1,
+    // 创建星星粒子系统
+    const starsGeometry = new THREE.BufferGeometry();
+    const starsMaterial = new THREE.PointsMaterial({
         color: 0x64ffda,
+        size: 0.5,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.8,
         blending: THREE.AdditiveBlending
     });
     
-    // 网格
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
+    const starsVertices = [];
+    for (let i = 0; i < 1000; i++) {
+        const x = (Math.random() - 0.5) * 100;
+        const y = (Math.random() - 0.5) * 100;
+        const z = (Math.random() - 0.5) * 100;
+        starsVertices.push(x, y, z);
+    }
     
-    // 动画
-    const animate = () => {
-        requestAnimationFrame(animate);
-        particlesMesh.rotation.y += 0.001;
-        renderer.render(scene, camera);
-    };
+    starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+    const stars = new THREE.Points(starsGeometry, starsMaterial);
+    scene.add(stars);
     
-    animate();
+    // 添加环境光
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
     
-    // 窗口大小调整
+    // 添加平行光
+    const directionalLight = new THREE.DirectionalLight(0x64ffda, 0.8);
+    directionalLight.position.set(0, 1, 1);
+    scene.add(directionalLight);
+    
+    // 处理窗口大小变化
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
+    
+    // 动画循环
+    const animate = () => {
+        requestAnimationFrame(animate);
+        
+        // 旋转星星
+        stars.rotation.x += 0.0005;
+        stars.rotation.y += 0.0005;
+        
+        renderer.render(scene, camera);
+    };
+    
+    // 启动动画
+    animate();
+    
+    // 返回场景对象以便外部访问
+    return { scene, camera, renderer };
 } 
 
 // 设置联系表单
