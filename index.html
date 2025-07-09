@@ -467,32 +467,6 @@
     
     <!-- 添加备用错误处理脚本 -->
     <script>
-    window.addEventListener('load', function() {
-        // 检查页面是否正常加载
-        setTimeout(function() {
-            var loadingScreen = document.getElementById('loading-screen');
-            if (loadingScreen) {
-                loadingScreen.style.opacity = '0';
-                setTimeout(function() {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }
-            
-            // 检查THREE是否已加载
-            if (typeof THREE === 'undefined') {
-                console.error('THREE.js未加载，尝试重新加载');
-                var script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-                document.body.appendChild(script);
-            }
-            
-            // 确保页面可见
-            document.body.style.visibility = 'visible';
-            document.body.style.opacity = '1';
-        }, 1000);
-    });
-    
-    // 错误监听
     window.addEventListener('error', function(e) {
         console.error('全局错误:', e.message);
         // 确保页面至少是可见的
@@ -504,81 +478,6 @@
             loadingScreen.style.display = 'none';
         }
     });
-    </script>
-
-    <script>
-// 立即显示主内容
-document.addEventListener('DOMContentLoaded', function() {
-    // 将内容设为可见
-    document.body.style.visibility = 'visible';
-    document.body.style.opacity = '1';
-    
-    // 隐藏加载屏幕
-    var loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        loadingScreen.style.visibility = 'hidden';
-    }
-    
-    // 确保main内容可见
-    var mainContent = document.querySelector('main');
-    if (mainContent) {
-        mainContent.style.visibility = 'visible';
-        mainContent.style.opacity = '1';
-        mainContent.style.zIndex = '5';
-    }
-    
-    // 确保header可见
-    var header = document.querySelector('header');
-    if (header) {
-        header.style.visibility = 'visible';
-        header.style.opacity = '1';
-        header.style.zIndex = '5';
-    }
-});
-</script>
-
-    <!-- 添加强制显示内容的脚本 -->
-    <script>
-        // 确保页面内容显示
-        window.onload = function() {
-            // 设置所有主要内容为可见
-            document.body.style.visibility = 'visible';
-            document.body.style.opacity = '1';
-            
-            // 确保头部和各部分内容可见
-            const header = document.getElementById('home');
-            const main = document.querySelector('main');
-            const sections = document.querySelectorAll('section');
-            
-            if (header) {
-                header.style.visibility = 'visible';
-                header.style.opacity = '1';
-                header.style.zIndex = '10';
-            }
-            
-            if (main) {
-                main.style.visibility = 'visible';
-                main.style.opacity = '1';
-                main.style.zIndex = '10';
-            }
-            
-            sections.forEach(section => {
-                section.style.visibility = 'visible';
-                section.style.opacity = '1';
-                section.style.zIndex = '10';
-            });
-            
-            // 降低背景元素的z-index
-            const bgElements = document.querySelectorAll('#bg-canvas, .particles-container, .grid-overlay, .noise');
-            bgElements.forEach(el => {
-                if (el) {
-                    el.style.zIndex = '-15';
-                    el.style.position = 'fixed';
-                    el.style.pointerEvents = 'none';
-                }
-            });
-        };
     </script>
 </body>
 </html> 
