@@ -1,0 +1,392 @@
+<div class="row">
+    <div class="col-lg-8">
+        <!-- 博客头部 -->
+        <div class="mb-5">
+            <h1 class="display-5 fw-bold">余胜辉的技术博客</h1>
+            <p class="text-light fs-5">大模型算法工程师的技术思考与学习笔记</p>
+        </div>
+        
+        <!-- 博客文章列表 -->
+        <div class="blog-posts">
+            <!-- 博客文章卡片将通过前端脚本加载 -->
+            <div id="blog-posts-container" class="row">
+                <!-- 文章将由API加载 -->
+                <div class="text-center py-5">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-2 text-muted">加载博客文章...</p>
+                </div>
+            </div>
+            
+            <!-- 分页 -->
+            <div class="mt-4 d-flex justify-content-center">
+                <nav id="blog-pagination" aria-label="博客分页" class="d-none">
+                    <ul class="pagination">
+                        <!-- 分页将由API加载 -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- 侧边栏 -->
+        
+        <!-- 搜索框 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">搜索</h4>
+            <div class="input-group">
+                <input type="text" id="blog-search-input" class="form-control" placeholder="搜索文章...">
+                <button class="btn btn-primary" type="button" id="blog-search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 分类 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">文章分类</h4>
+            <div id="blog-categories">
+                <!-- 分类将由API加载 -->
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 标签云 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">标签云</h4>
+            <div id="blog-tags" class="blog-tag-cloud">
+                <!-- 标签将由API加载 -->
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 关于博主 -->
+        <div class="blog-sidebar">
+            <h4 class="blog-sidebar-title">关于我</h4>
+            <div class="text-center mb-3">
+                <img src="/assets/images/avatar.jpg" alt="余胜辉" class="rounded-circle" width="100" height="100">
+            </div>
+            <p>余胜辉，大模型算法工程师，专注于AI技术应用与全栈开发。</p>
+            <div class="d-flex justify-content-center">
+                <a href="https://github.com/Trueysh" class="me-2" target="_blank">
+                    <i class="fab fa-github fa-lg"></i>
+                </a>
+                <a href="https://linkedin.com/" class="me-2" target="_blank">
+                    <i class="fab fa-linkedin fa-lg"></i>
+                </a>
+                <a href="https://twitter.com/" target="_blank">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 博客脚本 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 当前页码
+        let currentPage = 1;
+        // 当前查询参数
+        let currentQuery = new URLSearchParams(window.location.search);
+        
+        // 加载博客文章
+        function loadBlogPosts() {
+            // 构建API URL
+            let apiUrl = '/api/posts?page=' + currentPage + '&limit=6';
+            
+            // 添加查询参数
+            if (currentQuery.has('category')) {
+                apiUrl += '&category=' + currentQuery.get('category');
+            }
+            
+            if (currentQuery.has('tag')) {
+                apiUrl += '&tag=' + currentQuery.get('tag');
+            }
+            
+            if (currentQuery.has('search')) {
+                apiUrl += '&search=' + currentQuery.get('search');
+            }
+            
+            // 获取文章
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const postsContainer = document.getElementById('blog-posts-container');
+                    
+                    // 清空容器
+                    postsContainer.innerHTML = '';
+                    
+                    // 如果没有文章
+                    if (data.data.length === 0) {
+                        postsContainer.innerHTML = `
+                            <div class="col-12 text-center py-5">
+                                <i class="fas fa-inbox fa-3x mb-3 text-muted"></i>
+                                <h3>暂无文章</h3>
+                                <p class="text-muted">没有找到符合条件的博客文章。</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // 渲染文章
+                    data.data.forEach(post => {
+                        const postDate = new Date(post.publishedAt || post.createdAt).toLocaleDateString('zh-CN');
+                        
+                        // 创建分类标签HTML
+                        let categoriesHtml = '';
+                        if (post.categories && post.categories.length > 0) {
+                            post.categories.forEach(category => {
+                                categoriesHtml += `<span class="blog-category-badge">${category}</span>`;
+                            });
+                        }
+                        
+                        // 创建文章卡片
+                        const postHtml = `
+                            <div class="col-md-6 mb-4">
+                                <div class="blog-post h-100">
+                                    <div class="blog-post-image">
+                                        <img src="/uploads/${post.coverImage}" alt="${post.title}">
+                                    </div>
+                                    <div class="blog-post-content">
+                                        <h2 class="blog-post-title">
+                                            <a href="/blog/${post.slug}">${post.title}</a>
+                                        </h2>
+                                        <div class="blog-post-meta">
+                                            <span><i class="far fa-calendar-alt me-1"></i> ${postDate}</span>
+                                            <span class="ms-3"><i class="far fa-eye me-1"></i> ${post.viewCount} 阅读</span>
+                                        </div>
+                                        <div class="blog-post-excerpt">${post.excerpt}</div>
+                                        <div class="blog-post-categories mb-3">
+                                            ${categoriesHtml}
+                                        </div>
+                                        <a href="/blog/${post.slug}" class="btn btn-sm btn-outline-primary">阅读更多</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        postsContainer.innerHTML += postHtml;
+                    });
+                    
+                    // 渲染分页
+                    renderPagination(data.pagination, data.total);
+                })
+                .catch(error => {
+                    console.error('加载博客文章失败:', error);
+                    document.getElementById('blog-posts-container').innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3 text-danger"></i>
+                            <h3>加载失败</h3>
+                            <p class="text-muted">无法加载博客文章，请稍后再试。</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        // 渲染分页
+        function renderPagination(pagination, total) {
+            const paginationElement = document.getElementById('blog-pagination');
+            if (!pagination || (!pagination.next && !pagination.prev && currentPage === 1)) {
+                paginationElement.classList.add('d-none');
+                return;
+            }
+            
+            paginationElement.classList.remove('d-none');
+            
+            // 计算总页数
+            const limit = pagination.next ? pagination.next.limit : (pagination.prev ? pagination.prev.limit : 6);
+            const totalPages = Math.ceil(total / limit);
+            
+            let paginationHtml = '';
+            
+            // 上一页按钮
+            paginationHtml += `
+                <li class="page-item ${!pagination.prev ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="上一页">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            // 页码按钮
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            // 第一页
+            if (startPage > 1) {
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="1">1</a>
+                    </li>
+                `;
+                
+                if (startPage > 2) {
+                    paginationHtml += `
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    `;
+                }
+            }
+            
+            // 中间页码
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHtml += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `;
+            }
+            
+            // 最后一页
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHtml += `
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    `;
+                }
+                
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+                    </li>
+                `;
+            }
+            
+            // 下一页按钮
+            paginationHtml += `
+                <li class="page-item ${!pagination.next ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="下一页">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            paginationElement.querySelector('ul').innerHTML = paginationHtml;
+            
+            // 添加分页点击事件
+            paginationElement.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = parseInt(this.getAttribute('data-page'));
+                    if (page && page !== currentPage && page > 0 && page <= totalPages) {
+                        currentPage = page;
+                        loadBlogPosts();
+                        // 滚动到顶部
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+        
+        // 加载分类
+        function loadCategories() {
+            fetch('/api/posts/categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categoriesContainer = document.getElementById('blog-categories');
+                    
+                    if (!data.data || data.data.length === 0) {
+                        categoriesContainer.innerHTML = '<p class="text-muted">暂无分类</p>';
+                        return;
+                    }
+                    
+                    let categoriesHtml = '<ul class="list-unstyled">';
+                    
+                    data.data.forEach(category => {
+                        const isActive = currentQuery.get('category') === category._id;
+                        categoriesHtml += `
+                            <li class="mb-2">
+                                <a href="/blog?category=${category._id}" class="d-flex justify-content-between align-items-center ${isActive ? 'text-primary fw-bold' : ''}">
+                                    <span>${category._id}</span>
+                                    <span class="badge bg-secondary">${category.count}</span>
+                                </a>
+                            </li>
+                        `;
+                    });
+                    
+                    categoriesHtml += '</ul>';
+                    categoriesContainer.innerHTML = categoriesHtml;
+                })
+                .catch(error => {
+                    console.error('加载分类失败:', error);
+                    document.getElementById('blog-categories').innerHTML = '<p class="text-danger">加载分类失败</p>';
+                });
+        }
+        
+        // 加载标签
+        function loadTags() {
+            fetch('/api/posts/tags')
+                .then(response => response.json())
+                .then(data => {
+                    const tagsContainer = document.getElementById('blog-tags');
+                    
+                    if (!data.data || data.data.length === 0) {
+                        tagsContainer.innerHTML = '<p class="text-muted">暂无标签</p>';
+                        return;
+                    }
+                    
+                    let tagsHtml = '';
+                    
+                    data.data.forEach(tag => {
+                        const isActive = currentQuery.get('tag') === tag._id;
+                        const fontSize = Math.min(1.5, Math.max(0.8, 0.8 + tag.count / 10));
+                        tagsHtml += `
+                            <a href="/blog?tag=${tag._id}" class="blog-tag me-2 mb-2 ${isActive ? 'text-primary fw-bold' : ''}" style="font-size: ${fontSize}rem;">
+                                ${tag._id}
+                            </a>
+                        `;
+                    });
+                    
+                    tagsContainer.innerHTML = tagsHtml;
+                })
+                .catch(error => {
+                    console.error('加载标签失败:', error);
+                    document.getElementById('blog-tags').innerHTML = '<p class="text-danger">加载标签失败</p>';
+                });
+        }
+        
+        // 初始加载
+        loadBlogPosts();
+        loadCategories();
+        loadTags();
+        
+        // 搜索功能
+        document.getElementById('blog-search-button').addEventListener('click', function() {
+            const searchInput = document.getElementById('blog-search-input');
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                currentQuery = new URLSearchParams();
+                currentQuery.set('search', searchTerm);
+                currentPage = 1;
+                
+                // 更新URL，但不刷新页面
+                const newUrl = window.location.pathname + '?' + currentQuery.toString();
+                history.pushState(null, '', newUrl);
+                
+                loadBlogPosts();
+            }
+        });
+        
+        // 回车搜索
+        document.getElementById('blog-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('blog-search-button').click();
+            }
+        });
+    });
+</script> 

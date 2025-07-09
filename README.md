@@ -1,128 +1,118 @@
-# 余胜辉 - 个人网站
+# 余胜辉的个人网站
 
-这是我的个人网站源代码，展示我作为大模型算法工程师的技能和项目经验。
+这是一个完整的个人网站项目，包括前端展示、博客系统和管理后台。
 
-## 访问网站
+## 功能特点
 
-您可以通过以下链接访问我的个人网站：
-[https://trueysh.github.io/yushenghui-portfolio/](https://trueysh.github.io/yushenghui-portfolio/)
+### 前端展示
+- 响应式设计，适配各种设备
+- 个人简介和技能展示
+- 项目作品展示
+- 联系表单
+
+### 博客系统
+- 文章发布和管理
+- 分类和标签系统
+- 评论功能
+- 点赞功能
+- 搜索功能
+
+### 管理后台
+- 仪表板数据统计
+- 项目管理
+- 博客文章管理
+- 评论审核
+- 留言管理
+- 个人资料设置
 
 ## 技术栈
 
 ### 前端
-- HTML5
-- CSS3
-- JavaScript
-- Three.js
-- AOS动画库
-- Particles.js
+- HTML5, CSS3, JavaScript
+- Bootstrap 5
+- Chart.js (数据可视化)
 
 ### 后端
 - Node.js
-- Express
-- MongoDB
-- JWT认证
-- Nodemailer
+- Express.js
+- MongoDB (数据库)
+- EJS (模板引擎)
+- JWT (身份验证)
 
-## 功能
+## 项目结构
 
-- 响应式设计
-- 技能展示
-- 项目展示
-- 作品集
-- 联系表单（连接后端API）
-- 管理员后台（用于管理项目和留言）
+```
+个人网址/
+  - controllers/      # 控制器
+  - middleware/       # 中间件
+  - models/           # 数据模型
+  - routes/           # 路由
+  - uploads/          # 上传文件
+  - views/            # 视图模板
+    - admin/          # 管理后台视图
+    - blog/           # 博客视图
+    - layouts/        # 布局模板
+    - partials/       # 部分视图
+  - index.html        # 前端首页
+  - script.js         # 前端脚本
+  - style.css         # 前端样式
+  - server.js         # 服务器入口
+  - package.json      # 项目配置
+  - .env              # 环境变量
+```
 
-## 安装与运行
+## 安装和启动
 
 ### 前提条件
 - Node.js (v14+)
-- MongoDB
+- MongoDB (本地或MongoDB Atlas)
 
 ### 安装步骤
 
 1. 克隆仓库
-```
-git clone https://github.com/Trueysh/yushenghui-portfolio.git
+```bash
+git clone https://github.com/yourusername/yushenghui-portfolio.git
 cd yushenghui-portfolio
 ```
 
 2. 安装依赖
-```
+```bash
 npm install
 ```
 
-3. 创建环境变量文件
-创建一个名为`.env`的文件，包含以下内容：
-```
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/portfolio
-JWT_SECRET=your_jwt_secret_key_here
-EMAIL_SERVICE=gmail
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-EMAIL_FROM=your_email@gmail.com
-NODE_ENV=development
+3. 配置环境变量
+复制`.env.example`文件为`.env`，并填写相应的配置信息：
+```bash
+cp .env.example .env
+# 编辑.env文件，填写MongoDB连接字符串和其他配置
 ```
 
-4. 启动MongoDB数据库
+4. 创建管理员账户
+```bash
+node seed-admin.js
+```
 
-5. 运行应用
-```
-npm run dev  # 开发模式
-```
-或
-```
-npm start    # 生产模式
+5. 启动服务器
+```bash
+npm run dev
 ```
 
 6. 访问网站
-在浏览器中打开 [http://localhost:5000](http://localhost:5000)
-
-## API端点
-
-### 认证
-- POST /api/auth/register - 注册新用户
-- POST /api/auth/login - 用户登录
-- GET /api/auth/me - 获取当前用户信息
-
-### 联系表单
-- POST /api/contact - 提交联系表单
-- GET /api/contact - 获取所有留言 (需管理员权限)
-- GET /api/contact/:id - 获取单个留言 (需管理员权限)
-- PUT /api/contact/:id - 更新留言状态 (需管理员权限)
-- DELETE /api/contact/:id - 删除留言 (需管理员权限)
-
-### 项目
-- GET /api/projects - 获取所有项目
-- GET /api/projects/:id - 获取单个项目
-- POST /api/projects - 创建新项目 (需管理员权限)
-- PUT /api/projects/:id - 更新项目 (需管理员权限)
-- DELETE /api/projects/:id - 删除项目 (需管理员权限)
+- 前端网站: http://localhost:5000
+- 博客: http://localhost:5000/blog
+- 管理后台: http://localhost:5000/admin
 
 ## 部署
 
-### 前端
-前端部分使用GitHub Pages部署。
+### 部署到生产环境
+1. 设置环境变量`NODE_ENV=production`
+2. 配置安全的MongoDB连接
+3. 使用PM2或类似工具管理Node.js进程
+4. 配置Nginx或其他Web服务器作为反向代理
 
-### 后端
-后端部署可以使用如下选项：
-- Heroku
-- AWS
-- DigitalOcean
-- 其他云服务提供商
+## 许可证
+MIT License
 
-## 管理员账户设置
-
-首次运行应用后，您需要创建一个管理员账户。您可以使用以下API创建：
-
-```
-POST /api/auth/register
-{
-  "username": "admin",
-  "email": "admin@example.com",
-  "password": "secure_password"
-}
-```
-
+## 作者
+余胜辉 - 大模型算法工程师
 然后，使用MongoDB Shell或MongoDB Compass将该用户的角色更改为"admin"。

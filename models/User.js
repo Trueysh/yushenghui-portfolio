@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, '请提供用户名'],
-    unique: true,
     trim: true,
-    minlength: [3, '用户名至少需要3个字符']
+    maxlength: [50, '用户名不能超过50个字符']
   },
   email: {
     type: String,
-    required: [true, '请提供邮箱'],
+    required: [true, '请提供电子邮箱'],
     unique: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      '请提供有效的邮箱地址'
+      '请提供有效的电子邮箱'
     ]
   },
   password: {
@@ -26,9 +26,11 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'user'],
+    enum: ['user', 'admin'],
     default: 'user'
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now
@@ -40,11 +42,17 @@ UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     next();
   }
-  
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
+
+// 生成JWT令牌
+UserSchema.methods.getSignedJwtToken = function() {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
 
 // 验证密码
 UserSchema.methods.matchPassword = async function(enteredPassword) {

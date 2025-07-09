@@ -1,0 +1,464 @@
+<div class="row">
+    <div class="col-lg-8">
+        <!-- 博客文章头部 -->
+        <div id="blog-post-header" class="blog-post-header">
+            <!-- 将由API加载 -->
+            <div class="text-center py-5">
+                <div class="spinner-border text-secondary" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+                <p class="mt-2 text-muted">加载文章...</p>
+            </div>
+        </div>
+        
+        <!-- 博客文章内容 -->
+        <div id="blog-post-content" class="blog-content">
+            <!-- 将由API加载 -->
+        </div>
+        
+        <!-- 文章标签 -->
+        <div id="blog-post-tags" class="my-4">
+            <!-- 将由API加载 -->
+        </div>
+        
+        <!-- 文章点赞 -->
+        <div id="blog-post-like" class="text-center my-5">
+            <button id="like-button" class="btn btn-outline-secondary">
+                <i class="far fa-heart"></i> 点赞 (<span id="like-count">0</span>)
+            </button>
+        </div>
+        
+        <!-- 文章评论 -->
+        <div id="blog-comments" class="blog-comments">
+            <h3 class="mb-4">评论</h3>
+            
+            <!-- 评论列表 -->
+            <div id="comments-list">
+                <!-- 将由API加载 -->
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 评论表单 -->
+            <div class="blog-comment-form">
+                <h4 class="mb-3">发表评论</h4>
+                <form id="comment-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="comment-name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="comment-name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="comment-email" class="form-label">邮箱 <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="comment-email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment-content" class="form-label">评论内容 <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="comment-content" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交评论</button>
+                    <p class="mt-2 small text-muted">评论提交后需要审核通过才会显示。</p>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- 侧边栏 -->
+        
+        <!-- 作者信息 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">作者</h4>
+            <div class="d-flex align-items-center">
+                <img src="/assets/images/avatar.jpg" alt="余胜辉" class="rounded-circle me-3" width="60" height="60">
+                <div>
+                    <h5 class="mb-1">余胜辉</h5>
+                    <p class="mb-0 text-muted">大模型算法工程师</p>
+                </div>
+            </div>
+            <p class="mt-3">专注于AI技术应用与全栈开发，分享技术思考与学习心得。</p>
+            <div class="d-flex">
+                <a href="https://github.com/Trueysh" class="me-2" target="_blank">
+                    <i class="fab fa-github fa-lg"></i>
+                </a>
+                <a href="https://linkedin.com/" class="me-2" target="_blank">
+                    <i class="fab fa-linkedin fa-lg"></i>
+                </a>
+                <a href="https://twitter.com/" target="_blank">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- 分类 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">文章分类</h4>
+            <div id="blog-categories">
+                <!-- 分类将由API加载 -->
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 热门文章 -->
+        <div class="blog-sidebar mb-4">
+            <h4 class="blog-sidebar-title">热门文章</h4>
+            <div id="popular-posts">
+                <!-- 热门文章将由API加载 -->
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 博客脚本 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取文章slug
+        const slug = window.location.pathname.split('/').pop();
+        let postId = '';
+        
+        // 加载文章详情
+        function loadPostDetails() {
+            fetch(`/api/posts/${slug}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error('文章加载失败');
+                    }
+                    
+                    const post = data.data;
+                    postId = post._id;
+                    
+                    // 更新页面标题
+                    document.title = `${post.title} | 余胜辉的技术博客`;
+                    
+                    // 渲染文章头部
+                    const postDate = new Date(post.publishedAt || post.createdAt).toLocaleDateString('zh-CN');
+                    
+                    // 创建分类标签HTML
+                    let categoriesHtml = '';
+                    if (post.categories && post.categories.length > 0) {
+                        post.categories.forEach(category => {
+                            categoriesHtml += `<a href="/blog?category=${category}" class="blog-category-badge">${category}</a>`;
+                        });
+                    }
+                    
+                    const headerHtml = `
+                        <h1 class="blog-post-page-title">${post.title}</h1>
+                        <div class="blog-post-page-meta">
+                            <span><i class="far fa-calendar-alt me-1"></i> ${postDate}</span>
+                            <span class="mx-3"><i class="far fa-eye me-1"></i> ${post.viewCount} 阅读</span>
+                            <span><i class="far fa-heart me-1"></i> <span id="like-count">${post.likeCount}</span> 喜欢</span>
+                        </div>
+                        <div class="mb-4">
+                            ${categoriesHtml}
+                        </div>
+                        <img src="/uploads/${post.coverImage}" alt="${post.title}" class="blog-post-cover">
+                    `;
+                    document.getElementById('blog-post-header').innerHTML = headerHtml;
+                    
+                    // 渲染文章内容
+                    document.getElementById('blog-post-content').innerHTML = marked.parse(post.content);
+                    
+                    // 渲染文章标签
+                    if (post.tags && post.tags.length > 0) {
+                        let tagsHtml = '<div class="d-flex align-items-center flex-wrap">';
+                        tagsHtml += '<strong class="me-2">标签:</strong>';
+                        post.tags.forEach(tag => {
+                            tagsHtml += `<a href="/blog?tag=${tag}" class="blog-tag me-2">${tag}</a>`;
+                        });
+                        tagsHtml += '</div>';
+                        document.getElementById('blog-post-tags').innerHTML = tagsHtml;
+                    } else {
+                        document.getElementById('blog-post-tags').style.display = 'none';
+                    }
+                    
+                    // 更新点赞按钮
+                    document.getElementById('like-count').textContent = post.likeCount;
+                    
+                    // 渲染评论
+                    renderComments(post.comments);
+                })
+                .catch(error => {
+                    console.error('加载文章失败:', error);
+                    document.getElementById('blog-post-header').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3 text-danger"></i>
+                            <h3>文章不存在</h3>
+                            <p class="text-muted">找不到此文章或文章已被删除。</p>
+                            <a href="/blog" class="btn btn-outline-primary mt-3">返回博客首页</a>
+                        </div>
+                    `;
+                    document.getElementById('blog-post-content').innerHTML = '';
+                    document.getElementById('blog-post-tags').innerHTML = '';
+                    document.getElementById('blog-post-like').style.display = 'none';
+                    document.getElementById('blog-comments').style.display = 'none';
+                });
+        }
+        
+        // 渲染评论
+        function renderComments(comments) {
+            const commentsContainer = document.getElementById('comments-list');
+            
+            if (!comments || comments.length === 0 || !comments.some(comment => comment.isApproved)) {
+                commentsContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="far fa-comment-dots fa-3x mb-3 text-muted"></i>
+                        <p>暂无评论，来发表第一条评论吧！</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let commentsHtml = '';
+            
+            // 过滤出已审核的评论
+            const approvedComments = comments.filter(comment => comment.isApproved);
+            
+            approvedComments.forEach(comment => {
+                const commentDate = new Date(comment.createdAt).toLocaleDateString('zh-CN');
+                commentsHtml += `
+                    <div class="blog-comment mb-4">
+                        <div class="blog-comment-meta">
+                            <strong>${comment.user}</strong> - ${commentDate}
+                        </div>
+                        <div class="blog-comment-content mt-2">
+                            ${comment.content}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            commentsContainer.innerHTML = commentsHtml;
+        }
+        
+        // 加载分类
+        function loadCategories() {
+            fetch('/api/posts/categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categoriesContainer = document.getElementById('blog-categories');
+                    
+                    if (!data.data || data.data.length === 0) {
+                        categoriesContainer.innerHTML = '<p class="text-muted">暂无分类</p>';
+                        return;
+                    }
+                    
+                    let categoriesHtml = '<ul class="list-unstyled">';
+                    
+                    data.data.forEach(category => {
+                        categoriesHtml += `
+                            <li class="mb-2">
+                                <a href="/blog?category=${category._id}" class="d-flex justify-content-between align-items-center">
+                                    <span>${category._id}</span>
+                                    <span class="badge bg-secondary">${category.count}</span>
+                                </a>
+                            </li>
+                        `;
+                    });
+                    
+                    categoriesHtml += '</ul>';
+                    categoriesContainer.innerHTML = categoriesHtml;
+                })
+                .catch(error => {
+                    console.error('加载分类失败:', error);
+                    document.getElementById('blog-categories').innerHTML = '<p class="text-danger">加载分类失败</p>';
+                });
+        }
+        
+        // 加载热门文章
+        function loadPopularPosts() {
+            fetch('/api/posts?sortBy=viewCount:desc&limit=5')
+                .then(response => response.json())
+                .then(data => {
+                    const popularPostsContainer = document.getElementById('popular-posts');
+                    
+                    if (!data.data || data.data.length === 0) {
+                        popularPostsContainer.innerHTML = '<p class="text-muted">暂无文章</p>';
+                        return;
+                    }
+                    
+                    let postsHtml = '<ul class="list-unstyled">';
+                    
+                    data.data.forEach(post => {
+                        // 跳过当前文章
+                        if (post.slug === slug) return;
+                        
+                        const postDate = new Date(post.publishedAt || post.createdAt).toLocaleDateString('zh-CN');
+                        
+                        postsHtml += `
+                            <li class="mb-3">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0" style="width: 60px; height: 60px;">
+                                        <img src="/uploads/${post.coverImage}" alt="${post.title}" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1"><a href="/blog/${post.slug}">${post.title}</a></h6>
+                                        <small class="text-muted">
+                                            <i class="far fa-calendar-alt me-1"></i> ${postDate}<br>
+                                            <i class="far fa-eye me-1"></i> ${post.viewCount} 阅读
+                                        </small>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    
+                    postsHtml += '</ul>';
+                    popularPostsContainer.innerHTML = postsHtml;
+                })
+                .catch(error => {
+                    console.error('加载热门文章失败:', error);
+                    document.getElementById('popular-posts').innerHTML = '<p class="text-danger">加载文章失败</p>';
+                });
+        }
+        
+        // 初始加载
+        loadPostDetails();
+        loadCategories();
+        loadPopularPosts();
+        
+        // Markdown 解析器
+        const marked = {
+            parse: function(markdown) {
+                if (!markdown) return '';
+                
+                // 简单的Markdown解析（生产环境中应使用成熟的Markdown库）
+                let html = markdown;
+                
+                // 标题
+                html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+                html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+                html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+                
+                // 粗体和斜体
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // 链接
+                html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+                
+                // 图片
+                html = html.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="img-fluid rounded">');
+                
+                // 代码块
+                html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+                
+                // 行内代码
+                html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+                
+                // 引用
+                html = html.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
+                
+                // 列表
+                html = html.replace(/^\s*\d+\.\s+(.*$)/gm, '<ol><li>$1</li></ol>');
+                html = html.replace(/^\s*[\-\*]\s+(.*$)/gm, '<ul><li>$1</li></ul>');
+                
+                // 段落
+                html = html.replace(/^(?!<h|<ul|<ol|<blockquote|<pre)(.*$)/gm, '<p>$1</p>');
+                
+                // 修复嵌套列表问题
+                html = html.replace(/<\/ol>\s*<ol>/g, '');
+                html = html.replace(/<\/ul>\s*<ul>/g, '');
+                
+                return html;
+            }
+        };
+        
+        // 处理评论表单提交
+        document.getElementById('comment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('comment-name').value.trim();
+            const email = document.getElementById('comment-email').value.trim();
+            const content = document.getElementById('comment-content').value.trim();
+            
+            if (!name || !email || !content) {
+                alert('请填写所有必填字段');
+                return;
+            }
+            
+            fetch(`/api/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user: name,
+                    email: email,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 清空表单
+                    document.getElementById('comment-form').reset();
+                    
+                    // 显示成功消息
+                    alert('评论已提交，等待审核通过后显示。');
+                } else {
+                    throw new Error(data.message || '评论提交失败');
+                }
+            })
+            .catch(error => {
+                console.error('提交评论失败:', error);
+                alert('评论提交失败，请稍后再试。');
+            });
+        });
+        
+        // 点赞功能
+        document.getElementById('like-button').addEventListener('click', function() {
+            if (!postId) return;
+            
+            fetch(`/api/posts/${postId}/like`, {
+                method: 'PUT'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新点赞数
+                    const likeCountElements = document.querySelectorAll('#like-count');
+                    likeCountElements.forEach(el => {
+                        el.textContent = data.data.likeCount;
+                    });
+                    
+                    // 添加点赞效果
+                    const likeButton = document.getElementById('like-button');
+                    likeButton.innerHTML = '<i class="fas fa-heart"></i> 已点赞 (' + data.data.likeCount + ')';
+                    likeButton.classList.remove('btn-outline-secondary');
+                    likeButton.classList.add('btn-danger');
+                    likeButton.disabled = true;
+                    
+                    // 记录在localStorage中防止重复点赞
+                    localStorage.setItem(`liked_${postId}`, 'true');
+                }
+            })
+            .catch(error => {
+                console.error('点赞失败:', error);
+                alert('点赞失败，请稍后再试。');
+            });
+        });
+        
+        // 检查是否已点赞
+        if (localStorage.getItem(`liked_${postId}`) === 'true') {
+            const likeButton = document.getElementById('like-button');
+            likeButton.innerHTML = '<i class="fas fa-heart"></i> 已点赞 (<span id="like-count">0</span>)';
+            likeButton.classList.remove('btn-outline-secondary');
+            likeButton.classList.add('btn-danger');
+            likeButton.disabled = true;
+        }
+    });
+</script> 

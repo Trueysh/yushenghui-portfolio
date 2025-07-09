@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | 余胜辉的技术博客</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Blog CSS -->
+    <style>
+        :root {
+            --primary-color: #0a192f;
+            --secondary-color: #64ffda;
+            --text-color: #e6f1ff;
+            --text-color-light: #8892b0;
+            --bg-dark: #0a192f;
+            --bg-light: #112240;
+            --border-color: rgba(100, 255, 218, 0.1);
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif SC', serif;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+        
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: rgba(100, 255, 218, 0.8);
+            text-decoration: underline;
+        }
+        
+        .blog-header {
+            background-color: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+        }
+        
+        .blog-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .blog-nav-link {
+            color: var(--text-color-light);
+            margin: 0 15px;
+            font-weight: 500;
+        }
+        
+        .blog-nav-link:hover, .blog-nav-link.active {
+            color: var(--secondary-color);
+        }
+        
+        .blog-footer {
+            background-color: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 15px;
+        }
+        
+        .blog-post {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-post:hover .blog-post-image img {
+            transform: scale(1.05);
+        }
+        
+        .blog-post-content {
+            padding: 20px;
+        }
+        
+        .blog-post-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .blog-post-meta {
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .blog-post-excerpt {
+            color: var(--text-color-light);
+            margin-bottom: 15px;
+        }
+        
+        .blog-post-categories {
+            margin-bottom: 15px;
+        }
+        
+        .blog-category-badge {
+            background-color: rgba(100, 255, 218, 0.1);
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        
+        .blog-sidebar {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .blog-sidebar-title {
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .blog-tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .blog-tag {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            color: var(--text-color-light);
+        }
+        
+        .blog-tag:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        /* 博客文章页样式 */
+        .blog-post-header {
+            margin-bottom: 40px;
+        }
+        
+        .blog-post-page-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .blog-post-page-meta {
+            color: var(--text-color-light);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .blog-post-cover {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .blog-content p {
+            margin-bottom: 20px;
+        }
+        
+        .blog-content h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .blog-content h3 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .blog-content pre {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .blog-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+        }
+        
+        .blog-content blockquote {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 20px;
+            margin-left: 0;
+            font-style: italic;
+            color: var(--text-color-light);
+        }
+        
+        .blog-content img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .blog-content a {
+            border-bottom: 1px dashed var(--secondary-color);
+        }
+        
+        .blog-content a:hover {
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .blog-comments {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .blog-comment {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .blog-comment-meta {
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .blog-comment-content {
+            color: var(--text-color);
+        }
+        
+        .blog-comment-form {
+            margin-top: 30px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .form-control {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .form-control:focus {
+            background-color: var(--bg-dark);
+            border-color: var(--secondary-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.25rem rgba(100, 255, 218, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border: none;
+            color: var(--bg-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: rgba(100, 255, 218, 0.8);
+            color: var(--bg-dark);
+        }
+    </style>
+    <% if (typeof additionalStyles !== 'undefined') { %>
+        <%- additionalStyles %>
+    <% } %>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="blog-header">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="/blog" class="blog-brand">余胜辉的技术博客</a>
+                </div>
+                <nav class="d-none d-md-flex">
+                    <a href="/" class="blog-nav-link">首页</a>
+                    <a href="/blog" class="blog-nav-link <%= title === '我的博客' ? 'active' : '' %>">博客</a>
+                    <a href="/#projects" class="blog-nav-link">项目</a>
+                    <a href="/#about" class="blog-nav-link">关于</a>
+                    <a href="/#contact" class="blog-nav-link">联系</a>
+                </nav>
+                <div class="d-md-none">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#blogOffcanvasMenu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 移动端侧边菜单 -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="blogOffcanvasMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">菜单</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <nav class="d-flex flex-column">
+                <a href="/" class="blog-nav-link mb-3">首页</a>
+                <a href="/blog" class="blog-nav-link mb-3 <%= title === '我的博客' ? 'active' : '' %>">博客</a>
+                <a href="/#projects" class="blog-nav-link mb-3">项目</a>
+                <a href="/#about" class="blog-nav-link mb-3">关于</a>
+                <a href="/#contact" class="blog-nav-link mb-3">联系</a>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- 主内容 -->
+    <main class="blog-container">
+        <%- body %>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="blog-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">关于我</h5>
+                    <p class="text-light">
+                        余胜辉，大模型算法工程师，专注于AI技术应用与全栈开发。这里记录我的技术思考与经验分享。
+                    </p>
+                    <div class="mt-4">
+                        <a href="https://github.com/Trueysh" target="_blank" class="me-3">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                        <a href="https://linkedin.com/" target="_blank" class="me-3">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                        <a href="https://twitter.com/" target="_blank">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">博客分类</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/blog?category=人工智能">人工智能</a></li>
+                        <li class="mb-2"><a href="/blog?category=大模型">大模型</a></li>
+                        <li class="mb-2"><a href="/blog?category=全栈开发">全栈开发</a></li>
+                        <li class="mb-2"><a href="/blog?category=技术思考">技术思考</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-white mb-3">联系我</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> <a href="mailto:contact@yushenghui.com">contact@yushenghui.com</a></li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 上海，中国</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="mb-0">&copy; 2024 余胜辉 保留所有权利</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <% if (typeof additionalScripts !== 'undefined') { %>
+        <%- additionalScripts %>
+    <% } %>
+</body>
+</html> 

@@ -1,0 +1,216 @@
+<div class="row">
+    <!-- 统计卡片 -->
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">博客文章</h5>
+                <div class="display-4"><%= stats.totalPosts %></div>
+                <div class="mt-2 text-muted">
+                    <span class="me-3"><i class="fas fa-check-circle"></i> <%= stats.publishedPosts %> 已发布</span>
+                    <span><i class="fas fa-pencil-alt"></i> <%= stats.draftPosts %> 草稿</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">项目</h5>
+                <div class="display-4"><%= stats.totalProjects %></div>
+                <div class="mt-2 text-muted">
+                    <span><i class="fas fa-star"></i> <%= stats.featuredProjects %> 精选项目</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">留言</h5>
+                <div class="display-4"><%= stats.totalContacts %></div>
+                <div class="mt-2 text-muted">
+                    <span class="me-3"><i class="fas fa-envelope"></i> <%= stats.unreadContacts %> 未读</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">评论</h5>
+                <div class="display-4"><%= stats.totalComments %></div>
+                <div class="mt-2 text-muted">
+                    <span><i class="fas fa-clock"></i> <%= stats.pendingComments %> 待审核</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 快速操作 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">快速操作</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/posts/new" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-plus me-2"></i> 新博客文章
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/projects/new" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-plus me-2"></i> 新项目
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/comments" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-comments me-2"></i> 审核评论
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/contacts" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-envelope me-2"></i> 查看留言
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 网站信息 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">网站信息</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>网站名称：</strong>余胜辉的个人网站</p>
+                <p><strong>管理员账户：</strong><%= user.username %></p>
+                <p><strong>服务器环境：</strong>Node.js + Express</p>
+                <p><strong>数据库：</strong>MongoDB</p>
+                <p><strong>当前版本：</strong>1.0.0</p>
+                <div class="mt-3">
+                    <a href="/admin/profile" class="btn btn-sm btn-primary">
+                        <i class="fas fa-cog me-1"></i> 系统设置
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 最近留言 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">最近留言</h5>
+                <a href="/admin/contacts" class="btn btn-sm btn-outline-primary">查看所有</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>邮箱</th>
+                                <th>状态</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentContacts && recentContacts.length > 0) { %>
+                                <% recentContacts.forEach(contact => { %>
+                                    <tr>
+                                        <td><%= contact.name %></td>
+                                        <td><%= contact.email %></td>
+                                        <td>
+                                            <% if (contact.status === '未读') { %>
+                                                <span class="badge bg-danger">未读</span>
+                                            <% } else { %>
+                                                <span class="badge bg-success">已读</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= new Date(contact.createdAt).toLocaleDateString('zh-CN') %></td>
+                                        <td>
+                                            <a href="/admin/contacts/<%= contact._id %>" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="5" class="text-center py-3">暂无留言</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 最近博客 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">最近博客</h5>
+                <a href="/admin/posts" class="btn btn-sm btn-outline-primary">查看所有</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>状态</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentPosts && recentPosts.length > 0) { %>
+                                <% recentPosts.forEach(post => { %>
+                                    <tr>
+                                        <td><%= post.title %></td>
+                                        <td>
+                                            <% if (post.status === '已发布') { %>
+                                                <span class="badge bg-success">已发布</span>
+                                            <% } else { %>
+                                                <span class="badge bg-warning">草稿</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= new Date(post.createdAt).toLocaleDateString('zh-CN') %></td>
+                                        <td>
+                                            <a href="/admin/posts/<%= post._id %>/edit" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <% if (post.status === '已发布') { %>
+                                                <a href="/blog/<%= post.slug %>" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center py-3">暂无博客文章</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加Chart.js支持 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 在这里可以添加仪表板的图表代码
+    // 例如：网站访问量统计、文章数据统计等
+</script> 
