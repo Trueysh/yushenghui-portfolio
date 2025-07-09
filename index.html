@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>余胜辉 - 大模型算法工程师</title>
+    <!-- 先加载样式 -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <!-- 添加Google字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 预加载所有JS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body class="dark-mode">
+    <!-- 添加初始加载遮罩 -->
+    <div id="loading-screen">
+        <div class="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <p>正在加载...</p>
+    </div>
+
+    <!-- 移除可能导致问题的元素 -->
+    <!-- <div class="cursor"></div> -->
+    <div class="grid-overlay"></div>
+    <!-- <div class="scanner-line"></div> -->
+    <div class="particles-container"></div>
+    <canvas class="noise"></canvas>
+    <div id="bg-canvas"></div>
+
+    <nav id="main-nav">
+        <div class="container nav-container">
+            <div class="logo">Y.S.H<span class="logo-dot"></span></div>
+            
+            <ul class="nav-menu">
+                <li><a href="#about" class="nav-link"><span>01.</span>关于我</a></li>
+                <li><a href="#skills" class="nav-link"><span>02.</span>技能栈</a></li>
+                <li><a href="#projects" class="nav-link"><span>03.</span>项目经历</a></li>
+                <li><a href="#portfolio" class="nav-link"><span>04.</span>作品集</a></li>
+                <li><a href="https://blog.csdn.net/TrueYSH" target="_blank" rel="noopener noreferrer" class="nav-link">我的博客</a></li>
+                <li><a href="#contact" class="nav-link"><span>05.</span>联系我</a></li>
+            </ul>
+            
+            <div class="nav-controls">
+                <!-- 主题切换按钮已移除 -->
+                <div class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" style="display: flex; visibility: visible; opacity: 1; z-index: 50; position: relative; margin-top: 80px; padding: 2rem;">
+        <div class="header-content" style="visibility: visible; opacity: 1;">
+            <div class="header-intro" data-aos="fade-up" data-aos-delay="200">
+                <span class="greeting">你好，我是</span>
+            </div>
+            <h1 data-aos="fade-up" data-aos-delay="400" style="color: #e6f1ff; font-size: 4rem; margin-bottom: 1rem;">余胜辉</h1>
+            <h2 class="subtitle" data-aos="fade-up" data-aos-delay="600" style="color: #8892b0; font-size: 2.5rem; margin-bottom: 2rem;">我构建面向未来的智能应用。</h2>
+            <p data-aos="fade-up" data-aos-delay="800" style="color: #8892b0; max-width: 600px; margin-bottom: 2rem;">
+                我是一名专注于大型语言模型（LLM）的算法工程师，同时也对全栈开发充满热情。我致力于探索AI的前沿，并通过代码将创新理念变为现实。
+            </p>
+            <div class="header-buttons" data-aos="fade-up" data-aos-delay="1000">
+                <a href="#projects" class="btn primary-btn">查看我的工作</a>
+                <a href="#contact" class="btn outline-btn">联系我</a>
+            </div>
+            <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="1200">
+                <span>向下滚动</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>01.</span>关于我</h2>
+                <div class="inner">
+                    <div class="about-text" data-aos="fade-right" data-aos-delay="300">
+                        <p>你好！我是余胜辉，一名热衷于在代码世界里创造价值的工程师。我的旅程始于对算法的好奇，并最终引我进入了最激动人心的人工智能领域——大型语言模型。</p>
+                        <p>我享受将复杂的理论转化为实际应用的过程，无论是优化一个模型的性能，还是构建一个端到端的智能系统。我坚信，最好的技术是那些能够赋能于人、解决真实世界挑战的技术。</p>
+                        <p>工作之余，我喜欢探索新的技术栈，为开源项目做贡献，或者沉浸在一场酣畅淋漓的策略游戏中。我总是在寻找新的学习机会，并乐于与志同道合的人交流思想。</p>
+                        <div class="about-stats">
+                            <div class="stat" data-aos="fade-up" data-aos-delay="400">
+                                <span class="stat-number">5+</span>
+                                <span class="stat-label">年技术经验</span>
+                            </div>
+                            <div class="stat" data-aos="fade-up" data-aos-delay="500">
+                                <span class="stat-number">15+</span>
+                                <span class="stat-label">项目完成</span>
+                            </div>
+                            <div class="stat" data-aos="fade-up" data-aos-delay="600">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">技术文章</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-photo" data-aos="fade-left" data-aos-delay="300">
+                        <div class="wrapper">
+                            <canvas id="about-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>02.</span>我的技能栈</h2>
+                <div class="skills-categories">
+                    <div class="skills-category" data-aos="fade-up" data-aos-delay="200">
+                        <h3>人工智能</h3>
+                        <div class="skill-bars">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>大型语言模型 (LLM) & RAG</p>
+                                    <p>95%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="95%"></span></div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>自然语言处理 (NLP)</p>
+                                    <p>90%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="90%"></span></div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>机器学习算法</p>
+                                    <p>85%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="85%"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skills-category" data-aos="fade-up" data-aos-delay="400">
+                        <h3>编程语言</h3>
+                        <div class="skill-bars">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>Python</p>
+                                    <p>95%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="95%"></span></div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>Java</p>
+                                    <p>85%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="85%"></span></div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <p>JavaScript</p>
+                                    <p>80%</p>
+                                </div>
+                                <div class="progress-line"><span data-percent="80%"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-stack">
+                    <div class="tech-item" data-tech="Python" data-aos="flip-left" data-aos-delay="100">
+                        <i class="fab fa-python"></i>
+                        <span>Python</span>
+                    </div>
+                    <div class="tech-item" data-tech="TensorFlow" data-aos="flip-left" data-aos-delay="200">
+                        <i class="fas fa-brain"></i>
+                        <span>TensorFlow</span>
+                    </div>
+                    <div class="tech-item" data-tech="PyTorch" data-aos="flip-left" data-aos-delay="300">
+                        <i class="fas fa-fire"></i>
+                        <span>PyTorch</span>
+                    </div>
+                    <div class="tech-item" data-tech="Java" data-aos="flip-left" data-aos-delay="400">
+                        <i class="fab fa-java"></i>
+                        <span>Java</span>
+                    </div>
+                    <div class="tech-item" data-tech="Docker" data-aos="flip-left" data-aos-delay="500">
+                        <i class="fab fa-docker"></i>
+                        <span>Docker</span>
+                    </div>
+                    <div class="tech-item" data-tech="React" data-aos="flip-left" data-aos-delay="600">
+                        <i class="fab fa-react"></i>
+                        <span>React</span>
+                    </div>
+                    <div class="tech-item" data-tech="Vue" data-aos="flip-left" data-aos-delay="700">
+                        <i class="fab fa-vuejs"></i>
+                        <span>Vue</span>
+                    </div>
+                    <div class="tech-item" data-tech="AWS" data-aos="flip-left" data-aos-delay="800">
+                        <i class="fab fa-aws"></i>
+                        <span>AWS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>03.</span>一些我构建的项目</h2>
+                
+                <div class="projects-wrapper">
+                    <!-- 项目卡片容器 -->
+                <div class="projects-grid">
+                    <!-- 项目1 -->
+                        <div class="card project-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="project-content">
+                                <div class="project-header">
+                                    <div class="project-icon"><i class="fas fa-robot"></i></div>
+                            <h3>企业级智能知识库</h3>
+                                </div>
+                            <p>一个基于RAG架构的智能问答系统，结合私有文档数据，为企业提供精准、可靠的内部知识检索服务。</p>
+                                <ul class="project-features">
+                                    <li>支持多种文档格式自动解析</li>
+                                    <li>基于先进向量数据库的语义检索</li>
+                                    <li>多轮上下文问答与推理能力</li>
+                                </ul>
+                                <div class="tags">
+                                    <span class="tag">LLM</span> 
+                                    <span class="tag">RAG</span> 
+                                    <span class="tag">Vector DB</span> 
+                                    <span class="tag">Flask</span>
+                        </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/Trueysh" target="_blank" rel="noopener noreferrer" class="project-link github"><i class="fab fa-github"></i></a>
+                                <a href="#" target="_blank" rel="noopener noreferrer" class="project-link external"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        
+                    <!-- 项目2 -->
+                        <div class="card project-card" data-aos="fade-up" data-aos-delay="400">
+                            <div class="project-content">
+                                <div class="project-header">
+                                    <div class="project-icon"><i class="fas fa-images"></i></div>
+                            <h3>多模态内容生成平台</h3>
+                                </div>
+                            <p>利用多模态大模型，根据文本描述生成图片、音频和短视频，赋能内容创作者，极大提升创作效率。</p>
+                                <ul class="project-features">
+                                    <li>基于自然语言的创意内容生成</li>
+                                    <li>多种风格和主题的图像生成</li>
+                                    <li>文本到语音与背景音乐合成</li>
+                                </ul>
+                                <div class="tags">
+                                    <span class="tag">Multi-modal</span> 
+                                    <span class="tag">PyTorch</span> 
+                                    <span class="tag">React</span> 
+                                    <span class="tag">AWS S3</span>
+                        </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/Trueysh" target="_blank" rel="noopener noreferrer" class="project-link github"><i class="fab fa-github"></i></a>
+                                <a href="#" target="_blank" rel="noopener noreferrer" class="project-link external"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        
+                    <!-- 项目3 -->
+                        <div class="card project-card" data-aos="fade-up" data-aos-delay="600">
+                            <div class="project-content">
+                                <div class="project-header">
+                                    <div class="project-icon"><i class="fas fa-code"></i></div>
+                            <h3>实时代码分析与优化工具</h3>
+                                </div>
+                            <p>一个集成在IDE中的插件，通过LLM分析代码片段，提供实时的优化建议、文档生成和错误检测。</p>
+                                <ul class="project-features">
+                                    <li>实时代码质量评估与建议</li>
+                                    <li>自动生成代码文档与注释</li>
+                                    <li>代码安全与性能分析</li>
+                                </ul>
+                                <div class="tags">
+                                    <span class="tag">Code LLM</span> 
+                                    <span class="tag">AST</span> 
+                                    <span class="tag">VS Code API</span> 
+                                    <span class="tag">Java</span>
+                        </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/Trueysh" target="_blank" rel="noopener noreferrer" class="project-link github"><i class="fab fa-github"></i></a>
+                                <a href="#" target="_blank" rel="noopener noreferrer" class="project-link external"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="view-more-container" data-aos="fade-up">
+                    <a href="https://github.com/Trueysh" target="_blank" rel="noopener noreferrer" class="outline-btn">
+                        查看更多项目 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>04.</span>作品集</h2>
+                <div class="portfolio-filters" data-aos="fade-up" data-aos-delay="200">
+                    <button class="portfolio-filter active" data-filter="all">全部</button>
+                    <button class="portfolio-filter" data-filter="ai">AI项目</button>
+                    <button class="portfolio-filter" data-filter="web">Web开发</button>
+                    <button class="portfolio-filter" data-filter="research">研究论文</button>
+                </div>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item" data-category="ai" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="portfolio-img">
+                            <img src="https://via.placeholder.com/600x400?text=AI+Project" alt="AI项目作品展示">
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>情感分析引擎</h3>
+                            <p>基于BERT的多语言情感分析系统</p>
+                            <a href="#" class="portfolio-link"><i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item" data-category="web" data-aos="zoom-in" data-aos-delay="400">
+                        <div class="portfolio-img">
+                            <img src="https://via.placeholder.com/600x400?text=Web+Project" alt="Web项目作品展示">
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>电商分析平台</h3>
+                            <p>React+Node.js构建的数据可视化平台</p>
+                            <a href="#" class="portfolio-link"><i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item" data-category="research" data-aos="zoom-in" data-aos-delay="500">
+                        <div class="portfolio-img">
+                            <img src="https://via.placeholder.com/600x400?text=Research+Paper" alt="研究论文作品展示">
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>LLM优化研究</h3>
+                            <p>大型语言模型推理优化方法研究</p>
+                            <a href="#" class="portfolio-link"><i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item" data-category="ai" data-aos="zoom-in" data-aos-delay="600">
+                        <div class="portfolio-img">
+                            <img src="https://via.placeholder.com/600x400?text=Another+AI+Project" alt="AI项目作品展示">
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>智能推荐系统</h3>
+                            <p>个性化内容推荐引擎</p>
+                            <a href="#" class="portfolio-link"><i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>05.</span>我的简历</h2>
+                <div class="card resume-card" data-aos="flip-up" data-aos-delay="300">
+                    <div class="resume-header">
+                        <div class="resume-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>查看我的完整履历</h3>
+                    </div>
+                    <p>了解我的专业背景、教育经历和工作经验</p>
+                     <embed src="余胜辉 大模型算法工程师.pdf" type="application/pdf" class="resume-viewer">
+                     <div class="resume-button-container">
+                        <a href="余胜辉 大模型算法工程师.pdf" download class="btn primary-btn">
+                            <i class="fas fa-download"></i> 下载简历 (PDF)
+                        </a>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up"><span>06.</span>下一步是？</h2>
+                <div class="contact-container">
+                    <div class="contact-info" data-aos="fade-right" data-aos-delay="300">
+             <h2>取得联系</h2>
+             <p>我一直在寻找新的挑战和机会，也乐于与同行交流。无论您有一个项目想法，或只是想打个招呼，我的收件箱随时为您敞开。</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>truetoysh@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>中国，北京</span>
+                            </div>
+                        </div>
+             <div class="contact-links">
+                            <a href="mailto:truetoysh@gmail.com" class="btn primary-btn">发送邮件</a>
+                        </div>
+                    </div>
+                    <div class="contact-form card" data-aos="fade-left" data-aos-delay="300">
+                        <h3>或者，直接留言</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <input type="text" id="name" name="name" placeholder="您的姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="您的邮箱" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="subject" name="subject" placeholder="主题">
+                            </div>
+                            <div class="form-group">
+                                <textarea id="message" name="message" placeholder="您的留言..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn primary-btn">发送留言</button>
+                        </form>
+                    </div>
+                </div>
+             </div>
+        </section>
+    </main>
+    
+    <button id="back-to-top"><i class="fas fa-arrow-up"></i></button>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-logo">Y.S.H<span class="logo-dot"></span></div>
+                <p>大模型算法工程师 | 全栈开发者</p>
+            </div>
+            <div class="footer-links">
+                <h4>快速导航</h4>
+                <ul>
+                    <li><a href="#about">关于我</a></li>
+                    <li><a href="#skills">技能栈</a></li>
+                    <li><a href="#projects">项目经历</a></li>
+                    <li><a href="#portfolio">作品集</a></li>
+                    <li><a href="#contact">联系我</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>社交媒体</h4>
+                <div class="social-links">
+            <a href="https://github.com/Trueysh" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/shenghui-yu-684102345/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://blog.csdn.net/TrueYSH" target="_blank" rel="noopener noreferrer" title="CSDN Blog"><i class="fa fa-blog"></i></a>
+        </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 余胜辉. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- 在body底部加载主脚本 -->
+    <script src="script.js"></script>
+    
+    <!-- 添加备用错误处理脚本 -->
+    <script>
+    window.addEventListener('load', function() {
+        // 检查页面是否正常加载
+        setTimeout(function() {
+            var loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+            
+            // 检查THREE是否已加载
+            if (typeof THREE === 'undefined') {
+                console.error('THREE.js未加载，尝试重新加载');
+                var script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+                document.body.appendChild(script);
+            }
+            
+            // 确保页面可见
+            document.body.style.visibility = 'visible';
+            document.body.style.opacity = '1';
+        }, 1000);
+    });
+    
+    // 错误监听
+    window.addEventListener('error', function(e) {
+        console.error('全局错误:', e.message);
+        // 确保页面至少是可见的
+        document.body.style.visibility = 'visible';
+        document.body.style.opacity = '1';
+        
+        var loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+        }
+    });
+    </script>
+
+    <script>
+// 立即显示主内容
+document.addEventListener('DOMContentLoaded', function() {
+    // 将内容设为可见
+    document.body.style.visibility = 'visible';
+    document.body.style.opacity = '1';
+    
+    // 隐藏加载屏幕
+    var loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        loadingScreen.style.visibility = 'hidden';
+    }
+    
+    // 确保main内容可见
+    var mainContent = document.querySelector('main');
+    if (mainContent) {
+        mainContent.style.visibility = 'visible';
+        mainContent.style.opacity = '1';
+        mainContent.style.zIndex = '5';
+    }
+    
+    // 确保header可见
+    var header = document.querySelector('header');
+    if (header) {
+        header.style.visibility = 'visible';
+        header.style.opacity = '1';
+        header.style.zIndex = '5';
+    }
+});
+</script>
+
+    <!-- 添加强制显示内容的脚本 -->
+    <script>
+        // 确保页面内容显示
+        window.onload = function() {
+            // 设置所有主要内容为可见
+            document.body.style.visibility = 'visible';
+            document.body.style.opacity = '1';
+            
+            // 确保头部和各部分内容可见
+            const header = document.getElementById('home');
+            const main = document.querySelector('main');
+            const sections = document.querySelectorAll('section');
+            
+            if (header) {
+                header.style.visibility = 'visible';
+                header.style.opacity = '1';
+                header.style.zIndex = '10';
+            }
+            
+            if (main) {
+                main.style.visibility = 'visible';
+                main.style.opacity = '1';
+                main.style.zIndex = '10';
+            }
+            
+            sections.forEach(section => {
+                section.style.visibility = 'visible';
+                section.style.opacity = '1';
+                section.style.zIndex = '10';
+            });
+            
+            // 降低背景元素的z-index
+            const bgElements = document.querySelectorAll('#bg-canvas, .particles-container, .grid-overlay, .noise');
+            bgElements.forEach(el => {
+                if (el) {
+                    el.style.zIndex = '-15';
+                    el.style.position = 'fixed';
+                    el.style.pointerEvents = 'none';
+                }
+            });
+        };
+    </script>
+</body>
+</html> 
